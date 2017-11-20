@@ -1,5 +1,5 @@
 require "apitester/version"
 
 module Apitester
-  # Your code goes here...
+  autoload :FaradayCalls, 'apitester/faraday_calls'
 end

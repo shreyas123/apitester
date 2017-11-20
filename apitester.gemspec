@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Shreyas Agarwal"]
   spec.email         = ["agarwal@fidor.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Allows you to make calls to the APIs}
+  spec.description   = %q{This gem allows you to make GET/POST/PUT/DELETE calls to the APIs and allows you to validate the response and the header operations}
+  spec.homepage      = "http://www.whathomepage.com"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -32,5 +32,10 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.15"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "pry"
+  spec.add_development_dependency "guard-rspec"
+
+  spec.add_dependency "rspec", "~> 3.0"
+  spec.add_dependency 'webmock', '~>  3.1'
+  spec.add_dependency 'faraday', '~>  0.13'
 end
