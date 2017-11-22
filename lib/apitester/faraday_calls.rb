@@ -9,27 +9,33 @@ module Apitester
     end
 
     def get(path, body = {}, headers = {}, &block)
-      conn = Faraday.new
-      conn.get path, body do |req|
-        conn.url_prefix = base_url
-        req.path = path
-        req.headers = headers
-        yield req, conn if block_given?
-      end
+      make_request(:get, path, body, headers, &block)
     end
 
     def post(path, body = {}, headers = {}, &block)
-      conn.post path, body do |req|
-        conn.url_prefix = base_url
-        req.path = path
-        req.headers = headers
-        yield req, conn if block_given?
-      end
+      make_request(:post, path, body, headers, &block)
+    end
+
+    def put(path, body = {}, headers = {}, &block)
+      make_request(:put, path, body, headers, &block)
+    end
+
+    def delete(path, body = {}, headers = {}, &block)
+      make_request(:delete, path, body, headers, &block)
     end
 
     private
       def conn
         @conn ||= Faraday.new
+      end
+
+      def make_request(method_name, path, body, headers, &block)
+        conn.send(method_name, path, body) do |req|
+          conn.url_prefix = base_url
+          req.path = path
+          req.headers = headers
+          yield req, conn if block_given?
+        end
       end
   end
 end

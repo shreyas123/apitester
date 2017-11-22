@@ -90,4 +90,88 @@ RSpec.describe Apitester::FaradayCalls do
       end
     end
   end
+
+  describe '#put' do
+    fcontext 'when have only path' do
+      it 'makes a simple put call' do
+        obj.put '/asdasd'
+        expect(a_request(:put, "www.example.com/asdasd").with(body: {})).to have_been_made.once
+      end
+    end
+
+    context 'when request has body' do
+      it 'makes calls with body specified in the body params' do
+        obj.put '/asdasd', { jane: 'doe' }
+        expect(a_request(:put, "www.example.com/asdasd").with(body: 'jane=doe')).to have_been_made.once
+      end
+    end
+
+    context 'when request also has headers' do
+      it 'makes calls with headers specified' do
+        obj.put '/asdasd', { }, { a: '1' }
+        expect(a_request(:put, "www.example.com/asdasd").with({headers: {'A' => '1'}})).to have_been_made.once
+      end
+    end
+
+    context 'when request has body and headers' do
+      it 'makes calls with body specified in the body params' do
+        obj.put '/asdasd', { jane: 'doe' }, { a: '1' }
+        expect(a_request(:put, "www.example.com/asdasd").with({headers: {'A' => '1'}, body: 'jane=doe'})).to have_been_made.once
+      end
+    end
+
+    context 'when request has a different URL than the URL specified' do
+      before { stub_request(:any, /www.example.de/) }
+
+      it 'makes calls with body specified in the body params' do
+        obj.put '/asdasd', { jane: 'doe' } do |k, c|
+          c.url_prefix = 'http://www.example.de'
+          k.headers.merge!({ a: '1' })
+        end
+        expect(a_request(:put, "www.example.de/asdasd").with({headers: {'A' => '1'}, body: 'jane=doe'})).to have_been_made.once
+      end
+    end
+  end
+
+  xdescribe '#delete' do
+    fcontext 'when have only path' do
+      it 'makes a simple delete call' do
+        obj.delete '/asdasd'
+        expect(a_request(:delete, "www.example.com/asdasd").with(body: {})).to have_been_made.once
+      end
+    end
+
+    context 'when request has body' do
+      it 'makes calls with body specified in the body params' do
+        obj.delete '/asdasd', { jane: 'doe' }
+        expect(a_request(:delete, "www.example.com/asdasd").with(body: 'jane=doe')).to have_been_made.once
+      end
+    end
+
+    context 'when request also has headers' do
+      it 'makes calls with headers specified' do
+        obj.delete '/asdasd', { }, { a: '1' }
+        expect(a_request(:delete, "www.example.com/asdasd").with({headers: {'A' => '1'}})).to have_been_made.once
+      end
+    end
+
+    context 'when request has body and headers' do
+      it 'makes calls with body specified in the body params' do
+        obj.delete '/asdasd', { jane: 'doe' }, { a: '1' }
+        expect(a_request(:delete, "www.example.com/asdasd").with({headers: {'A' => '1'}, body: 'jane=doe'})).to have_been_made.once
+      end
+    end
+
+    context 'when request has a different URL than the URL specified' do
+      before { stub_request(:any, /www.example.de/) }
+
+      it 'makes calls with body specified in the body params' do
+        obj.delete '/asdasd', { jane: 'doe' } do |k, c|
+          c.url_prefix = 'http://www.example.de'
+          k.headers.merge!({ a: '1' })
+        end
+        expect(a_request(:delete, "www.example.de/asdasd").with({headers: {'A' => '1'}, body: 'jane=doe'})).to have_been_made.once
+      end
+    end
+  end
 end
