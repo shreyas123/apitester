@@ -10,18 +10,26 @@ module Apitester
 
     def get(path, body = {}, headers = {}, &block)
       conn = Faraday.new
-      if block_given?
-        conn.get path, body do |req|
-          conn.url_prefix = base_url
-          yield req, conn
-        end
-      else
-        conn.get path, body do |req|
-          conn.url_prefix = base_url
-          req.path = path
-          req.headers = headers
-        end
+      conn.get path, body do |req|
+        conn.url_prefix = base_url
+        req.path = path
+        req.headers = headers
+        yield req, conn if block_given?
       end
     end
+
+    def post(path, body = {}, headers = {}, &block)
+      conn.post path, body do |req|
+        conn.url_prefix = base_url
+        req.path = path
+        req.headers = headers
+        yield req, conn if block_given?
+      end
+    end
+
+    private
+      def conn
+        @conn ||= Faraday.new
+      end
   end
 end
